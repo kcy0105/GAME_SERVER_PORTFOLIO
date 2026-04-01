@@ -1,0 +1,61 @@
+﻿#include "pch.h"
+#include <iostream>
+#include <thread>
+#include <vector>
+using namespace std;
+#include <atomic>
+#include <mutex>
+#include "ThreadManager.h"
+#include "SocketUtils.h"
+#include "Listener.h"
+#include "Service.h"
+#include "GameSession.h"
+#include "GameSessionManager.h"
+#include "ServerPacketHandler.h"
+#include "Room.h"
+
+enum
+{
+	WORKER_TICK = 64
+};
+
+void DoWorkerJob(ServerServiceRef& service)
+{
+	while (true)
+	{
+		service->GetIocpCore()->Dispatch(10);
+		/*
+		LEndTickCount = ::GetTickCount64() + WORKER_TICK;
+
+		// 네트워크 입출력 처리 -> 인게임 로직까지 (패킷 핸들러에 의해)
+		service->GetIocpCore()->Dispatch(10);
+
+		// 예약된 일감 처리
+		ThreadManager::DistributeReservedJobs();
+
+		// 글로벌 큐
+		ThreadManager::DoGlobalQueueWork();
+		*/
+	}
+}
+
+int main()
+{
+	ServerServiceRef service = make_shared<ServerService>(
+		NetAddress(L"127.0.0.1", 7777),
+		make_shared<IocpCore>(),
+		[](){ return make_shared<GameSession>(); }, // TODO : SessionManager 등
+		100);
+
+	assert(service->Start());
+
+	for (int32 i = 0; i < 1; i++)
+	{
+		GThreadManager->Launch([&service]()
+			{
+				DoWorkerJob(service);
+			});
+	}
+
+	GThreadManager->Join();
+}
