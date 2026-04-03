@@ -103,6 +103,10 @@ void FlipbookRenderer::Render(HDC hdc)
 	int32 srcX = (fb->GetStart() + _idx) * width;
 	int32 srcY = fb->GetLine() * height;
 
+	HDC srcDC = fb->GetTexture()->GetDC();
+	COLORREF transparent = fb->GetTexture()->GetTransparent();
+
+	// 일반 렌더링
 	if (_flipX == false)
 	{
 		::TransparentBlt(hdc,
@@ -110,27 +114,50 @@ void FlipbookRenderer::Render(HDC hdc)
 			drawY,
 			width,
 			height,
-			fb->GetTexture()->GetDC(),
+			srcDC,
 			srcX,
 			srcY,
 			width,
 			height,
-			fb->GetTexture()->GetTransparent());
+			transparent);
 	}
+	// 좌우 반전 렌더링
 	else
 	{
-		// 좌우 반전: 시작 위치를 오른쪽으로 이동 + width를 음수로
-		::TransparentBlt(hdc,
-			drawX + width,
-			drawY,
-			-width,
-			height,
-			fb->GetTexture()->GetDC(),
-			srcX,
+		HDC tempDC = CreateCompatibleDC(hdc);
+		HBITMAP tempBmp = CreateCompatibleBitmap(hdc, width, height);
+		HBITMAP oldBmp = (HBITMAP)SelectObject(tempDC, tempBmp);
+
+		// 보간 제거 (중요)
+		SetStretchBltMode(tempDC, COLORONCOLOR);
+
+		// 1. 뒤집어서 복사 (1px 보정 포함)
+		StretchBlt(tempDC,
+			0, 0, width, height,
+			srcDC,
+			srcX + width - 1,   // 핵심
 			srcY,
+			-(width - 1),       // 핵심
+			height,
+			SRCCOPY);
+
+		// 2. 투명 처리
+		TransparentBlt(hdc,
+			drawX,
+			drawY,
 			width,
 			height,
-			fb->GetTexture()->GetTransparent());
+			tempDC,
+			0,
+			0,
+			width,
+			height,
+			transparent);
+
+		// 정리
+		SelectObject(tempDC, oldBmp);
+		DeleteObject(tempBmp);
+		DeleteDC(tempDC);
 	}
 }
 

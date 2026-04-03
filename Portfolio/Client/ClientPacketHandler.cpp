@@ -6,6 +6,7 @@
 #include "ServerSession.h"
 #include "NetworkManager.h"
 #include "ObjectManager.h"
+#include "Player.h"
 
 void ClientPacketHandler::Handle_S_LOGIN(SessionRef session, Protocol::S_LOGIN& pkt)
 {
@@ -43,5 +44,24 @@ void ClientPacketHandler::Handle_S_DESPAWN(SessionRef session, Protocol::S_DESPA
 
 void ClientPacketHandler::Handle_S_MOVE(SessionRef session, Protocol::S_MOVE& pkt)
 {
-	// TODO
+	auto obj = GET_SINGLE(ObjectManager)->GetSyncObject(pkt.info().object_id());
+
+	auto player = static_cast<Player*>(obj);
+
+	if (player->IsMyPlayer())
+	{
+
+	}
+	else
+	{
+		/*==========
+		   무보정
+		===========*/
+		//player->SetPosInfo(pkt.info());
+
+		/*==========
+		    보정
+		===========*/
+		player->SetDestInfo(pkt.info());
+	}
 }

@@ -36,8 +36,11 @@ public:
 				continue;
 
 			PlayerRef player = static_pointer_cast<Player>(item.second);
-			player->session.lock()->SendPacket(pkt);
 
+			if (auto session = player->session.lock())
+			{
+				session->SendPacket(pkt);
+			}
 		}
 	}
 

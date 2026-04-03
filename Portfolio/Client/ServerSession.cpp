@@ -13,3 +13,8 @@ void ServerSession::OnConnected()
 		GET_SINGLE(NetworkManager)->SendPacket(pkt);
 	}
 }
+
+void ServerSession::OnDisconnected()
+{
+
+}

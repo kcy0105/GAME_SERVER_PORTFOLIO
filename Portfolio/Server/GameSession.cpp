@@ -12,7 +12,10 @@ void GameSession::OnConnected()
 
 void GameSession::OnDisconnected()
 {
+	GRoom->LeaveRoom(player.load());
+
 	GSessionManager.Remove(static_pointer_cast<GameSession>(shared_from_this()));
+
 }
 
 void GameSession::OnRecvPacket(BYTE* buffer, int32 len)

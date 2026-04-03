@@ -364,9 +364,10 @@ class PosInfo final :
     kObjectIdFieldNumber = 1,
     kPosXFieldNumber = 2,
     kPosYFieldNumber = 3,
-    kVelocityXFieldNumber = 4,
-    kVelocityYFieldNumber = 5,
-    kStateFieldNumber = 6,
+    kLookingRightFieldNumber = 4,
+    kVelocityXFieldNumber = 5,
+    kVelocityYFieldNumber = 6,
+    kStateFieldNumber = 7,
   };
   // uint64 object_id = 1;
   void clear_object_id();
@@ -395,7 +396,16 @@ class PosInfo final :
   void _internal_set_pos_y(float value);
   public:
 
-  // float velocity_x = 4;
+  // bool looking_right = 4;
+  void clear_looking_right();
+  bool looking_right() const;
+  void set_looking_right(bool value);
+  private:
+  bool _internal_looking_right() const;
+  void _internal_set_looking_right(bool value);
+  public:
+
+  // float velocity_x = 5;
   void clear_velocity_x();
   float velocity_x() const;
   void set_velocity_x(float value);
@@ -404,7 +414,7 @@ class PosInfo final :
   void _internal_set_velocity_x(float value);
   public:
 
-  // float velocity_y = 5;
+  // float velocity_y = 6;
   void clear_velocity_y();
   float velocity_y() const;
   void set_velocity_y(float value);
@@ -413,7 +423,7 @@ class PosInfo final :
   void _internal_set_velocity_y(float value);
   public:
 
-  // .Protocol.MoveState state = 6;
+  // .Protocol.MoveState state = 7;
   void clear_state();
   ::Protocol::MoveState state() const;
   void set_state(::Protocol::MoveState value);
@@ -433,6 +443,7 @@ class PosInfo final :
     uint64_t object_id_;
     float pos_x_;
     float pos_y_;
+    bool looking_right_;
     float velocity_x_;
     float velocity_y_;
     int state_;
@@ -646,7 +657,27 @@ inline void PosInfo::set_pos_y(float value) {
   // @@protoc_insertion_point(field_set:Protocol.PosInfo.pos_y)
 }
 
-// float velocity_x = 4;
+// bool looking_right = 4;
+inline void PosInfo::clear_looking_right() {
+  _impl_.looking_right_ = false;
+}
+inline bool PosInfo::_internal_looking_right() const {
+  return _impl_.looking_right_;
+}
+inline bool PosInfo::looking_right() const {
+  // @@protoc_insertion_point(field_get:Protocol.PosInfo.looking_right)
+  return _internal_looking_right();
+}
+inline void PosInfo::_internal_set_looking_right(bool value) {
+  
+  _impl_.looking_right_ = value;
+}
+inline void PosInfo::set_looking_right(bool value) {
+  _internal_set_looking_right(value);
+  // @@protoc_insertion_point(field_set:Protocol.PosInfo.looking_right)
+}
+
+// float velocity_x = 5;
 inline void PosInfo::clear_velocity_x() {
   _impl_.velocity_x_ = 0;
 }
@@ -666,7 +697,7 @@ inline void PosInfo::set_velocity_x(float value) {
   // @@protoc_insertion_point(field_set:Protocol.PosInfo.velocity_x)
 }
 
-// float velocity_y = 5;
+// float velocity_y = 6;
 inline void PosInfo::clear_velocity_y() {
   _impl_.velocity_y_ = 0;
 }
@@ -686,7 +717,7 @@ inline void PosInfo::set_velocity_y(float value) {
   // @@protoc_insertion_point(field_set:Protocol.PosInfo.velocity_y)
 }
 
-// .Protocol.MoveState state = 6;
+// .Protocol.MoveState state = 7;
 inline void PosInfo::clear_state() {
   _impl_.state_ = 0;
 }

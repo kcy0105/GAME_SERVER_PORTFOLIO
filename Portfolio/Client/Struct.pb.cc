@@ -41,6 +41,7 @@ PROTOBUF_CONSTEXPR PosInfo::PosInfo(
     /*decltype(_impl_.object_id_)*/uint64_t{0u}
   , /*decltype(_impl_.pos_x_)*/0
   , /*decltype(_impl_.pos_y_)*/0
+  , /*decltype(_impl_.looking_right_)*/false
   , /*decltype(_impl_.velocity_x_)*/0
   , /*decltype(_impl_.velocity_y_)*/0
   , /*decltype(_impl_.state_)*/0
@@ -78,6 +79,7 @@ const uint32_t TableStruct_Struct_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.object_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.pos_x_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.pos_y_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.looking_right_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.velocity_x_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.velocity_y_),
   PROTOBUF_FIELD_OFFSET(::Protocol::PosInfo, _impl_.state_),
@@ -96,18 +98,18 @@ const char descriptor_table_protodef_Struct_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "\n\014Struct.proto\022\010Protocol\032\nEnum.proto\"o\n\n"
   "ObjectInfo\022\021\n\tobject_id\030\001 \001(\004\022)\n\013object_"
   "type\030\002 \001(\0162\024.Protocol.ObjectType\022#\n\010pos_"
-  "info\030\003 \001(\0132\021.Protocol.PosInfo\"\206\001\n\007PosInf"
+  "info\030\003 \001(\0132\021.Protocol.PosInfo\"\235\001\n\007PosInf"
   "o\022\021\n\tobject_id\030\001 \001(\004\022\r\n\005pos_x\030\002 \001(\002\022\r\n\005p"
-  "os_y\030\003 \001(\002\022\022\n\nvelocity_x\030\004 \001(\002\022\022\n\nveloci"
-  "ty_y\030\005 \001(\002\022\"\n\005state\030\006 \001(\0162\023.Protocol.Mov"
-  "eStateb\006proto3"
+  "os_y\030\003 \001(\002\022\025\n\rlooking_right\030\004 \001(\010\022\022\n\nvel"
+  "ocity_x\030\005 \001(\002\022\022\n\nvelocity_y\030\006 \001(\002\022\"\n\005sta"
+  "te\030\007 \001(\0162\023.Protocol.MoveStateb\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] = {
   &::descriptor_table_Enum_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_Struct_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
-    false, false, 294, descriptor_table_protodef_Struct_2eproto,
+    false, false, 317, descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once, descriptor_table_Struct_2eproto_deps, 1, 2,
     schemas, file_default_instances, TableStruct_Struct_2eproto::offsets,
@@ -396,6 +398,7 @@ PosInfo::PosInfo(const PosInfo& from)
       decltype(_impl_.object_id_){}
     , decltype(_impl_.pos_x_){}
     , decltype(_impl_.pos_y_){}
+    , decltype(_impl_.looking_right_){}
     , decltype(_impl_.velocity_x_){}
     , decltype(_impl_.velocity_y_){}
     , decltype(_impl_.state_){}
@@ -416,6 +419,7 @@ inline void PosInfo::SharedCtor(
       decltype(_impl_.object_id_){uint64_t{0u}}
     , decltype(_impl_.pos_x_){0}
     , decltype(_impl_.pos_y_){0}
+    , decltype(_impl_.looking_right_){false}
     , decltype(_impl_.velocity_x_){0}
     , decltype(_impl_.velocity_y_){0}
     , decltype(_impl_.state_){0}
@@ -482,25 +486,33 @@ const char* PosInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
         } else
           goto handle_unusual;
         continue;
-      // float velocity_x = 4;
+      // bool looking_right = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 37)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.looking_right_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // float velocity_x = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
           _impl_.velocity_x_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float velocity_y = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
+      // float velocity_y = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
           _impl_.velocity_y_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // .Protocol.MoveState state = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+      // .Protocol.MoveState state = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_state(static_cast<::Protocol::MoveState>(val));
@@ -562,31 +574,37 @@ uint8_t* PosInfo::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteFloatToArray(3, this->_internal_pos_y(), target);
   }
 
-  // float velocity_x = 4;
+  // bool looking_right = 4;
+  if (this->_internal_looking_right() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_looking_right(), target);
+  }
+
+  // float velocity_x = 5;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_velocity_x = this->_internal_velocity_x();
   uint32_t raw_velocity_x;
   memcpy(&raw_velocity_x, &tmp_velocity_x, sizeof(tmp_velocity_x));
   if (raw_velocity_x != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(4, this->_internal_velocity_x(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_velocity_x(), target);
   }
 
-  // float velocity_y = 5;
+  // float velocity_y = 6;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_velocity_y = this->_internal_velocity_y();
   uint32_t raw_velocity_y;
   memcpy(&raw_velocity_y, &tmp_velocity_y, sizeof(tmp_velocity_y));
   if (raw_velocity_y != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_velocity_y(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_velocity_y(), target);
   }
 
-  // .Protocol.MoveState state = 6;
+  // .Protocol.MoveState state = 7;
   if (this->_internal_state() != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      6, this->_internal_state(), target);
+      7, this->_internal_state(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -628,7 +646,12 @@ size_t PosInfo::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float velocity_x = 4;
+  // bool looking_right = 4;
+  if (this->_internal_looking_right() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // float velocity_x = 5;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_velocity_x = this->_internal_velocity_x();
   uint32_t raw_velocity_x;
@@ -637,7 +660,7 @@ size_t PosInfo::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float velocity_y = 5;
+  // float velocity_y = 6;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_velocity_y = this->_internal_velocity_y();
   uint32_t raw_velocity_y;
@@ -646,7 +669,7 @@ size_t PosInfo::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // .Protocol.MoveState state = 6;
+  // .Protocol.MoveState state = 7;
   if (this->_internal_state() != 0) {
     total_size += 1 +
       ::_pbi::WireFormatLite::EnumSize(this->_internal_state());
@@ -686,6 +709,9 @@ void PosInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
   memcpy(&raw_pos_y, &tmp_pos_y, sizeof(tmp_pos_y));
   if (raw_pos_y != 0) {
     _this->_internal_set_pos_y(from._internal_pos_y());
+  }
+  if (from._internal_looking_right() != 0) {
+    _this->_internal_set_looking_right(from._internal_looking_right());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_velocity_x = from._internal_velocity_x();

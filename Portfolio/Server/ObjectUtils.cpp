@@ -12,5 +12,8 @@ PlayerRef ObjectUtils::CreatePlayer(GameSessionRef session)
 	player->session = session;
 	session->player.store(player);
 
+	player->posInfo->set_state(Protocol::MOVE_STATE_IDLE);
+	player->posInfo->set_looking_right(true);
+
 	return player;
 }

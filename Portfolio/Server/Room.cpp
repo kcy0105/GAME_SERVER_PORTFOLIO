@@ -53,6 +53,8 @@ bool Room::EnterRoom(ObjectRef object, bool randPos)
 
 			for (auto& item : _objects)
 			{
+				if (item.second->objectInfo->object_id() == object->objectInfo->object_id())
+					continue;
 				Protocol::ObjectInfo* info = pkt.add_objects();
 				info->CopyFrom(*item.second->objectInfo);
 			}
@@ -129,10 +131,10 @@ void Room::HandleMove(Protocol::C_MOVE pkt)
 	player->posInfo->CopyFrom(pkt.info());
 
 	{
-		Protocol::S_MOVE pkt;
-		Protocol::PosInfo* info = pkt.mutable_info();
+		Protocol::S_MOVE sendPkt;
+		Protocol::PosInfo* info = sendPkt.mutable_info();
 		info->CopyFrom(pkt.info());
-		Broadcast(pkt);
+		Broadcast(sendPkt);
 	}
 }
 

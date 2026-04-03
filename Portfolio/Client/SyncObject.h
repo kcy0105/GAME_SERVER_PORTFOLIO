@@ -11,8 +11,13 @@ public:
 	virtual void OnUpdate() override;
 	virtual void OnRelease() override;
 
-	void SetInfo(const Protocol::ObjectInfo& info);
+	virtual void SetObjectInfo(const Protocol::ObjectInfo& info);
+	virtual void SetPosInfo(const Protocol::PosInfo& info);
+	virtual void SetMoveState(Protocol::MoveState state);
+
 	uint64 GetObjectId()	const { return _objectInfo->object_id(); }
+	Protocol::MoveState GetMoveState() const { return _posInfo->state(); }
+
 
 protected:
 	Protocol::ObjectInfo* _objectInfo = nullptr;

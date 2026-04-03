@@ -19,14 +19,19 @@ void ObjectManager::UnregisterSyncObject(SyncObject* obj)
 MyPlayer* ObjectManager::SpawnMyPlayer(const Protocol::ObjectInfo& info)
 {
 	MyPlayer* obj = Object::CreateObject<MyPlayer>();
-	obj->SetInfo(info);
+	obj->SetObjectInfo(info);
 
 	return obj;
 }
 
 SyncObject* ObjectManager::SpawnSyncObject(const Protocol::ObjectInfo& info)
 {
-	return nullptr;
+	// TODO : 타입에 따라 다르게.
+	
+	Player* obj = Object::CreateObject<Player>();
+	obj->SetObjectInfo(info);
+
+	return obj;
 }
 
 void ObjectManager::DespawnSyncObject(uint64 id)

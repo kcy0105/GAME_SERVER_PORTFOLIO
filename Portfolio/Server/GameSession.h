@@ -26,6 +26,5 @@ public:
 	}
 
 public:
-	//weak_ptr<Room> Room;
 	atomic<PlayerRef> player;
 };

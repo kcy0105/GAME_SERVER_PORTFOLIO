@@ -7,8 +7,12 @@
 void DevScene::OnInit()
 {
 	{
-		Texture* texture = GET_SINGLE(ResourceManager)->LoadTexture(L"WarriorIdle", L"Warrior_Idle.bmp", RGB(0, 0, 0));
+		Texture* texture = GET_SINGLE(ResourceManager)->LoadTexture(L"WarriorIdle", L"Warrior_Idle.bmp", RGB(255, 255, 255));
 		GET_SINGLE(ResourceManager)->CreateFlipbook(L"FB_WarriorIdle", texture, { 192, 192 }, 0, 7, 0, 0.5f, true);
+	}
+	{
+		Texture* texture = GET_SINGLE(ResourceManager)->LoadTexture(L"WarriorRun", L"Warrior_Run.bmp", RGB(255, 255, 255));
+		GET_SINGLE(ResourceManager)->CreateFlipbook(L"FB_WarriorRun", texture, { 192, 192 }, 0, 5, 0, 0.5f, true);
 	}
 }
 

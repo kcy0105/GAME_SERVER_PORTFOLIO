@@ -15,7 +15,8 @@ message PosInfo
 	uint64 object_id = 1;
 	float pos_x = 2;
 	float pos_y = 3;
-	float velocity_x = 4;
-	float velocity_y = 5;
-	MoveState state = 6;
+	bool looking_right = 4;
+	float velocity_x = 5;
+	float velocity_y = 6;
+	MoveState state = 7;
 }

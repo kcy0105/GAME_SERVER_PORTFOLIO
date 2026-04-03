@@ -5,6 +5,7 @@
 void SyncObject::OnInit()
 {
 	_objectInfo = new Protocol::ObjectInfo();
+	_posInfo = _objectInfo->mutable_pos_info();
 }
 
 void SyncObject::OnUpdate()
@@ -19,12 +20,30 @@ void SyncObject::OnRelease()
 	SAFE_DELETE(_objectInfo);
 }
 
-void SyncObject::SetInfo(const Protocol::ObjectInfo& info)
+void SyncObject::SetObjectInfo(const Protocol::ObjectInfo& info)
 {
+	SetPos({ info.pos_info().pos_x(), info.pos_info().pos_y() });
+	SetMoveState(info.pos_info().state());
+
 	_objectInfo->CopyFrom(info);
 	_posInfo = _objectInfo->mutable_pos_info();
 
-	SetPos({ _posInfo->pos_x(), _posInfo->pos_y() });
-
 	GET_SINGLE(ObjectManager)->RegisterSyncObject(this);
 }
+
+void SyncObject::SetPosInfo(const Protocol::PosInfo& info)
+{
+	SetPos({ info.pos_x(), info.pos_y() });
+	SetMoveState(info.state());
+
+	_posInfo->CopyFrom(info);
+}
+
+void SyncObject::SetMoveState(Protocol::MoveState state)
+{
+	if (_posInfo->state() == state)
+		return;
+
+	_posInfo->set_state(state);
+}
+
