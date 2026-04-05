@@ -34,6 +34,7 @@ protected:
 
 public:
 	virtual void SetObjectInfo(const Protocol::ObjectInfo& info) override;
+	virtual void SetPosInfo(const Protocol::PosInfo& info) override;
 	virtual void SetMoveState(Protocol::MoveState state) override;
 
 	void SetDestInfo(const Protocol::PosInfo& info);

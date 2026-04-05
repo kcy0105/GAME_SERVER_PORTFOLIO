@@ -36,6 +36,24 @@ void MyPlayer::OnUpdate()
 	else if (_moveInput.x < 0)
 		SetDirection(false);
 
+	// move pos & velocity
+	if (GetMoveState() == Protocol::MOVE_STATE_RUN)
+	{
+		Vec2 dir = _moveInput;
+		dir.Normalize();
+
+		Vec2 velocity = dir * MOVE_SPEED;
+		_pos += velocity * deltaTime;
+
+		_posInfo->set_velocity_x(velocity.x);
+		_posInfo->set_velocity_y(velocity.y);
+	}
+	else
+	{
+		_posInfo->set_velocity_x(0);
+		_posInfo->set_velocity_y(0);
+	}
+
 	_movePacketSendTimer -= deltaTime;
 
 	if (_movePacketSendTimer <= 0 || forceSendPacket)
@@ -48,17 +66,7 @@ void MyPlayer::OnUpdate()
 		GET_SINGLE(NetworkManager)->SendPacket(pkt);
 	}
 
-	if (GetMoveState() == Protocol::MOVE_STATE_RUN)
-	{
-		Vec2 dir = _moveInput;
-		dir.Normalize();
-
-		Vec2 velocity = dir * MOVE_SPEED;
-		_pos += velocity * deltaTime;
-
-		_posInfo->set_velocity_x(velocity.x);
-		_posInfo->set_velocity_y(velocity.y);
-	}
+	
 }
 
 void MyPlayer::FillMoveInput()

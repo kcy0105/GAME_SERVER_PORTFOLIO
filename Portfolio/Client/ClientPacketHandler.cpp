@@ -62,6 +62,11 @@ void ClientPacketHandler::Handle_S_MOVE(SessionRef session, Protocol::S_MOVE& pk
 		/*==========
 		    보정
 		===========*/
-		player->SetDestInfo(pkt.info());
+		//player->SetDestInfo(pkt.info());
+
+		/*============
+		   속도 기반
+		=============*/
+		player->SetPosInfo(pkt.info());
 	}
 }
