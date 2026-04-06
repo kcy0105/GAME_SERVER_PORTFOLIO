@@ -61,6 +61,7 @@ void MyPlayer::OnUpdate()
 		_movePacketSendTimer = MOVE_PACKET_SEND_INTERVAL;
 
 		Protocol::C_MOVE pkt;
+		pkt.set_timestamp(::GetTickCount64());
 		pkt.mutable_info()->CopyFrom(*_posInfo);
 
 		GET_SINGLE(NetworkManager)->SendPacket(pkt);

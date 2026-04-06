@@ -47,12 +47,14 @@ message S_DESPAWN
 
 message C_MOVE
 {
-	PosInfo info = 1;
+	uint64 timestamp = 1;
+	PosInfo info = 2;
 }
 
 message S_MOVE
 {
-	PosInfo info = 1;
+	uint64 timestamp = 1;
+	PosInfo info = 2;
 }
 
 message C_PING

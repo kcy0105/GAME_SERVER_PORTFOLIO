@@ -39,32 +39,21 @@ void DevUI::OnRender(HDC hdc)
 	case SyncMode::Snap:
 		syncMode = L"SNAP";
 		break;
-	case SyncMode::Lerp:
-		syncMode = L"LERP";
+	case SyncMode::Interpolation:
+		syncMode = L"INTERPOLATION";
 		break;
-	case SyncMode::DeadReckoning:
-		syncMode = L"DEAD RECKONING";
+	case SyncMode::Velocity:
+		syncMode = L"VELOCITY";
+		break;
+	case SyncMode::DeadReckoning_Snap:
+		syncMode = L"DR_SNAP";
+		break;
+	case SyncMode::DeadReckoning_Follow:
+		syncMode = L"DR_FOLLOW";
 		break;
 	}
 	Utils::DrawTextInScreen(hdc, { 550, 50 }, std::format(L"SYNC MODE({})", syncMode));
-
-	wstring latencyLevel;
-	switch (Config::LatencyLevel)
-	{
-	case 0:
-		latencyLevel = L"NO LATENCY";
-		break;
-	case 1:
-		latencyLevel = L"GOOD";
-		break;
-	case 2:
-		latencyLevel = L"NORMAL";
-		break;
-	case 3:
-		latencyLevel = L"BAD";
-		break;
-	}
-	Utils::DrawTextInScreen(hdc, { 550, 70 }, std::format(L"LATENCY LEVEL({})", latencyLevel));
+	Utils::DrawTextInScreen(hdc, { 550, 70 }, std::format(L"LATENCY LEVEL({})", Config::LatencyLevel));
 }
 
 void DevUI::OnRelease()

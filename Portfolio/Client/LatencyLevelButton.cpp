@@ -28,6 +28,6 @@ void LatencyLevelButton::OnClickButton()
 {
 	Config::LatencyLevel++;
 
-	if (Config::LatencyLevel >= 4)
+	if (Config::LatencyLevel >= 5)
 		Config::LatencyLevel = 0;
 }

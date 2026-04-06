@@ -17,6 +17,8 @@ enum class SyncMode
 	Snap,
 	Interpolation,
 	Velocity,
-	DeadReckoning,
+	DeadReckoning_Snap,
+	DeadReckoning_Follow,
+
 	Count,
 };

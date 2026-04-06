@@ -59,11 +59,44 @@ void ClientPacketHandler::Handle_S_MOVE(SessionRef session, Protocol::S_MOVE& pk
 		case SyncMode::Snap:
 			player->SetPosInfo(pkt.info());
 			break;
-		case SyncMode::Lerp:
+		case SyncMode::Interpolation:
 			player->SetDestInfo(pkt.info());
 			break;
-		case SyncMode::DeadReckoning:
+		case SyncMode::Velocity:
 			player->SetPosInfo(pkt.info());
+			break;
+		case SyncMode::DeadReckoning_Snap:
+		{
+			auto info = pkt.mutable_info();
+
+			float deltaTime = (::GetTickCount64() - pkt.timestamp()) / 1000.f;
+			Pos pos = { info->pos_x(), info->pos_y() };
+			Vec2 velocity = { info->velocity_x(), info->velocity_y() };
+			Pos newPos = pos + velocity * deltaTime;
+
+			info->set_pos_x(newPos.x);
+			info->set_pos_y(newPos.y);
+
+			player->SetPosInfo(*info);
+		}
+			break;
+		case SyncMode::DeadReckoning_Follow:
+		{
+			Protocol::PosInfo info;
+			info.CopyFrom(pkt.info());
+
+			float deltaTime = (::GetTickCount64() - pkt.timestamp()) / 1000.f;
+			Pos pos = { info.pos_x(), info.pos_y() };
+			Vec2 velocity = { info.velocity_x(), info.velocity_y() };
+			Pos newPos = pos + velocity * deltaTime;
+
+			info.set_pos_x(newPos.x);
+			info.set_pos_y(newPos.y);
+
+			player->SetDestInfo(info);
+			player->SetMoveState(info.state());
+		}
+			
 			break;
 		}
 	}

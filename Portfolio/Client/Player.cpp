@@ -29,7 +29,7 @@ void Player::OnUpdate()
 	{
 		switch (Config::SyncMode)
 		{
-		case SyncMode::Lerp:
+		case SyncMode::Interpolation:
 		{
 			Vec2 dir = Vec2{ _destPosInfo->pos_x(), _destPosInfo->pos_y() } - _pos;
 
@@ -54,8 +54,8 @@ void Player::OnUpdate()
 			}
 		}
 			break;
-
-		case SyncMode::DeadReckoning:
+		case SyncMode::Velocity:
+		case SyncMode::DeadReckoning_Snap:
 		{
 			if (GetMoveState() == Protocol::MOVE_STATE_RUN)
 			{
@@ -64,7 +64,38 @@ void Player::OnUpdate()
 			}
 		}
 			break;
+		case SyncMode::DeadReckoning_Follow:
+		{
+			_destPosInfo->set_pos_x(_destPosInfo->pos_x() + _destPosInfo->velocity_x() * deltaTime);
+			_destPosInfo->set_pos_y(_destPosInfo->pos_y() + _destPosInfo->velocity_y() * deltaTime);
+
+			Vec2 targetPos = { _destPosInfo->pos_x(), _destPosInfo->pos_y() };
+			Vec2 diff = targetPos - _pos;
+
+			float dist = diff.Length();
+
+			if (dist < 1.f)
+			{
+				_pos = targetPos;
+
+				_posInfo->set_velocity_x(0);
+				_posInfo->set_velocity_y(0);
+			}
+			else
+			{
+				float followSpeed = 10.f;
+
+				Vec2 velocity = diff * followSpeed;
+				Vec2 move = velocity * deltaTime;
+				_pos += move;
+
+				_posInfo->set_velocity_x(velocity.x);
+				_posInfo->set_velocity_y(velocity.y);
+			}
 		}
+		break;
+		}
+
 	}
 }
 
@@ -74,6 +105,12 @@ void Player::OnRender(HDC hdc)
 
 void Player::OnDebugRender(HDC hdc)
 {
+	if (!_isMyPlayer)
+	{
+		if (Config::SyncMode == SyncMode::DeadReckoning_Follow
+			|| Config::SyncMode == SyncMode::Interpolation)
+			Utils::DrawCircleInWorld(hdc, { _destPosInfo->pos_x(), _destPosInfo->pos_y() }, 5);
+	}
 }
 
 void Player::SetDirection(bool isRight)

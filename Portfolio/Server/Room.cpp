@@ -132,6 +132,7 @@ void Room::HandleMove(Protocol::C_MOVE pkt)
 
 	{
 		Protocol::S_MOVE sendPkt;
+		sendPkt.set_timestamp(pkt.timestamp());
 		Protocol::PosInfo* info = sendPkt.mutable_info();
 		info->CopyFrom(pkt.info());
 		Broadcast(sendPkt);
