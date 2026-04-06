@@ -54,19 +54,24 @@ void ClientPacketHandler::Handle_S_MOVE(SessionRef session, Protocol::S_MOVE& pk
 	}
 	else
 	{
-		/*==========
-		   무보정
-		===========*/
-		//player->SetPosInfo(pkt.info());
-
-		/*==========
-		    보정
-		===========*/
-		//player->SetDestInfo(pkt.info());
-
-		/*============
-		   속도 기반
-		=============*/
-		player->SetPosInfo(pkt.info());
+		switch (Config::SyncMode)
+		{
+		case SyncMode::Snap:
+			player->SetPosInfo(pkt.info());
+			break;
+		case SyncMode::Lerp:
+			player->SetDestInfo(pkt.info());
+			break;
+		case SyncMode::DeadReckoning:
+			player->SetPosInfo(pkt.info());
+			break;
+		}
 	}
+}
+
+void ClientPacketHandler::Handle_S_PONG(SessionRef session, Protocol::S_PONG& pkt)
+{
+	uint64 ping = ::GetTickCount64() - pkt.send_tick();
+
+	GET_SINGLE(NetworkManager)->HandleNewPing(ping);
 }

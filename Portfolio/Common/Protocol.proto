@@ -54,3 +54,13 @@ message S_MOVE
 {
 	PosInfo info = 1;
 }
+
+message C_PING
+{
+	uint64 send_tick = 1;
+}
+
+message S_PONG
+{
+	uint64 send_tick = 1;
+}

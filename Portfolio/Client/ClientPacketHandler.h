@@ -18,4 +18,6 @@ public:
 
     static void Handle_S_MOVE(SessionRef session, Protocol::S_MOVE& pkt);
 
+    static void Handle_S_PONG(SessionRef session, Protocol::S_PONG& pkt);
+
 };

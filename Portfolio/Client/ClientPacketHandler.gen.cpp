@@ -10,3 +10,4 @@ REGISTER_PACKET(S_LEAVE_GAME, Protocol::S_LEAVE_GAME, ClientPacketHandler::Handl
 REGISTER_PACKET(S_SPAWN, Protocol::S_SPAWN, ClientPacketHandler::Handle_S_SPAWN);
 REGISTER_PACKET(S_DESPAWN, Protocol::S_DESPAWN, ClientPacketHandler::Handle_S_DESPAWN);
 REGISTER_PACKET(S_MOVE, Protocol::S_MOVE, ClientPacketHandler::Handle_S_MOVE);
+REGISTER_PACKET(S_PONG, Protocol::S_PONG, ClientPacketHandler::Handle_S_PONG);

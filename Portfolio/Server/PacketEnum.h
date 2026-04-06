@@ -14,6 +14,8 @@ enum PacketId
     S_DESPAWN = 17,
     C_MOVE = 18,
     S_MOVE = 19,
+    C_PING = 20,
+    S_PONG = 21,
 };
 
 template<typename T>
@@ -79,5 +81,17 @@ template<>
 struct PacketIdType<Protocol::S_MOVE>
 {
     static const uint16 value = S_MOVE;
+};
+
+template<>
+struct PacketIdType<Protocol::C_PING>
+{
+    static const uint16 value = C_PING;
+};
+
+template<>
+struct PacketIdType<Protocol::S_PONG>
+{
+    static const uint16 value = S_PONG;
 };
 

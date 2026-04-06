@@ -58,7 +58,7 @@ void MyPlayer::OnUpdate()
 
 	if (_movePacketSendTimer <= 0 || forceSendPacket)
 	{
-		_movePacketSendTimer = MOVE_PACKET_SEND_DELAY;
+		_movePacketSendTimer = MOVE_PACKET_SEND_INTERVAL;
 
 		Protocol::C_MOVE pkt;
 		pkt.mutable_info()->CopyFrom(*_posInfo);

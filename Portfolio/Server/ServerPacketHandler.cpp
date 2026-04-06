@@ -52,3 +52,11 @@ void ServerPacketHandler::Handle_C_MOVE(SessionRef session, Protocol::C_MOVE& pk
 
 	return;
 }
+
+void ServerPacketHandler::Handle_C_PING(SessionRef session, Protocol::C_PING& pkt)
+{
+	Protocol::S_PONG pongPkt;
+	pongPkt.set_send_tick(pkt.send_tick());
+
+	static_pointer_cast<GameSession>(session)->SendPacket(pongPkt);
+}

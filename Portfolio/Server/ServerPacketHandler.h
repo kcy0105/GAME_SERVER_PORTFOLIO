@@ -14,4 +14,6 @@ public:
 
     static void Handle_C_MOVE(SessionRef session, Protocol::C_MOVE& pkt);
 
+    static void Handle_C_PING(SessionRef session, Protocol::C_PING& pkt);
+
 };

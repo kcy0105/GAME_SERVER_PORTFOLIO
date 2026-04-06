@@ -1,4 +1,5 @@
 #pragma once
+
 class Game
 {
 public:
@@ -20,4 +21,3 @@ private:
 	HDC _hdcBack = {};
 	HBITMAP _bmpBack = {};
 };
-

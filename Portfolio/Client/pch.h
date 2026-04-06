@@ -18,6 +18,7 @@ using namespace std;
 #include "Enums.h"
 #include "Utils.h"
 #include "Values.h"
+#include "Config.h"
 
 #pragma comment(lib, "msimg32.lib")
 

@@ -10,8 +10,8 @@ private:
 	virtual void OnUpdate() override;
 
 protected:
-	const float MOVE_PACKET_SEND_DELAY = 0.2f;
-	float _movePacketSendTimer = MOVE_PACKET_SEND_DELAY;
+	const float MOVE_PACKET_SEND_INTERVAL = 0.2f;
+	float _movePacketSendTimer = MOVE_PACKET_SEND_INTERVAL;
 
 	Vec2 _moveInput;
 	Vec2 _lastMoveInput;

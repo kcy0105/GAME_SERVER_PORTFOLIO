@@ -3,6 +3,7 @@
 #include "Service.h"
 #include "ThreadManager.h"
 #include "ServerSession.h"
+#include "TimeManager.h"
 
 void NetworkManager::Init()
 {
@@ -31,9 +32,57 @@ void NetworkManager::Init()
 void NetworkManager::Update()
 {
 	_service->GetIocpCore()->Dispatch(0);
+	
+	while (!_delayedQueue.empty())
+	{
+		uint64 nowTick = ::GetTickCount64();
+
+		DelayedPacket pkt = _delayedQueue.front();
+
+		if (nowTick >= pkt.executeTick)
+		{
+			PacketHandler::HandlePacket(pkt.session, pkt.buffer.data(), pkt.len);
+			_delayedQueue.pop();
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	float deltaTime = GET_SINGLE(TimeManager)->GetDeltaTime();
+
+	_pingTimer -= deltaTime;
+
+	if (_pingTimer <= 0)
+	{
+		_pingTimer = PING_INTERVAL;
+
+		Protocol::C_PING pkt;
+		pkt.set_send_tick(::GetTickCount64());
+
+		SendPacket(pkt);
+	}
+
 }
 
 ServerSessionRef NetworkManager::CreateSession()
 {
 	return _session = make_shared<ServerSession>();
+}
+
+void NetworkManager::EnqueuePacket(ServerSessionRef session, BYTE* buffer, int32 len)
+{
+	DelayedPacket pkt;
+	pkt.session = session;
+	pkt.len = len;
+
+	pkt.buffer.resize(len);
+	memcpy(pkt.buffer.data(), buffer, len);
+
+	float nowTick = ::GetTickCount64();
+	float latency = Config::BaseLatency[Config::LatencyLevel] + ((rand() % 1000) / 1000.f) * 2 * Config::Jitter[Config::LatencyLevel] - Config::Jitter[Config::LatencyLevel];
+	pkt.executeTick = nowTick + latency;
+
+	_delayedQueue.push(pkt);
 }
