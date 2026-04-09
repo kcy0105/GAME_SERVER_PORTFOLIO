@@ -5,6 +5,7 @@
 #include "FlipbookRenderer.h"
 #include "ResourceManager.h"
 #include "ObjectManager.h"
+#include "NetworkManager.h"
 
 void Player::OnInit()
 {
@@ -96,6 +97,22 @@ void Player::OnUpdate()
 		break;
 		}
 
+		// 주기적으로 C_WHERE을 전송
+		if (Config::LogPos)
+		{
+			_logPacketSendTimer -= deltaTime;
+
+			if (_logPacketSendTimer <= 0)
+			{
+				_logPacketSendTimer = LOG_PACKET_SEND_INTERVAL;
+
+				Protocol::C_LOG_POS pkt;
+				pkt.mutable_info()->CopyFrom(*_posInfo);
+
+				GET_SINGLE(NetworkManager)->SendPacket(pkt);
+			}
+
+		}
 	}
 }
 

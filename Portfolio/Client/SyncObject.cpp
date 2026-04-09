@@ -20,6 +20,14 @@ void SyncObject::OnRelease()
 	SAFE_DELETE(_objectInfo);
 }
 
+void SyncObject::SetPos(Pos pos)
+{
+	__super::SetPos(pos);
+
+	_posInfo->set_pos_x(pos.x);
+	_posInfo->set_pos_y(pos.y);
+}
+
 void SyncObject::SetObjectInfo(const Protocol::ObjectInfo& info)
 {
 	SetPos({ info.pos_info().pos_x(), info.pos_info().pos_y() });

@@ -5,6 +5,7 @@
 #include "TimeManager.h"
 #include "SyncModeButton.h"
 #include "LatencyLevelButton.h"
+#include "SimulateButton.h"
 
 void DevUI::OnInit()
 {
@@ -15,6 +16,10 @@ void DevUI::OnInit()
 	{
 		LatencyLevelButton* button = UI::CreateUI<LatencyLevelButton>(this);
 		button->SetPos({ 650, 200 });
+	}
+	{
+		SimulateButton* button = UI::CreateUI<SimulateButton>(this);
+		button->SetPos({ 650, 270 });
 	}
 }
 

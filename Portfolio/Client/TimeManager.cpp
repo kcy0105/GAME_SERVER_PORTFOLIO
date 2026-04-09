@@ -4,7 +4,7 @@
 void TimeManager::Init()
 {
 	::QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&_frequency));
-	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&_prevCount)); // CPU 클럭
+	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&_prevCount));
 }
 
 void TimeManager::Update()
@@ -14,6 +14,21 @@ void TimeManager::Update()
 
 	_deltaTime = (currentCount - _prevCount) / static_cast<float>(_frequency);
 	_prevCount = currentCount;
+
+	// 누적 시간
+	_accTime += _deltaTime;
+
+	// 타이머 실행
+	while (!_jobQueue.empty())
+	{
+		const Job& job = _jobQueue.top();
+
+		if (job.executeTime > _accTime)
+			break;
+
+		job.callback();
+		_jobQueue.pop();
+	}
 
 	_frameCount++;
 	_frameTime += _deltaTime;
@@ -25,4 +40,13 @@ void TimeManager::Update()
 		_frameTime = 0.f;
 		_frameCount = 0;
 	}
+}
+
+void TimeManager::AddJob(float delay, std::function<void()> func)
+{
+	Job job;
+	job.executeTime = _accTime + delay;
+	job.callback = std::move(func);
+
+	_jobQueue.push(job);
 }

@@ -7,6 +7,7 @@ public:
 	virtual ~MyPlayer() {}
 
 private:
+	virtual void OnInit() override;
 	virtual void OnUpdate() override;
 
 protected:
@@ -21,7 +22,11 @@ protected:
 private:
 	void FillMoveInput();
 
-	
+public:
+	void StartSimulate();
+
+private:
+	bool _simulate = false;
 
 };
 

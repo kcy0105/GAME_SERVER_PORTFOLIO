@@ -218,6 +218,9 @@
     <ClInclude Include="LatencyLevelButton.h">
       <Filter>소스 파일\06. UI\Game</Filter>
     </ClInclude>
+    <ClInclude Include="SimulateButton.h">
+      <Filter>소스 파일\06. UI\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -344,6 +347,9 @@
       <Filter>소스 파일\06. UI\Game</Filter>
     </ClCompile>
     <ClCompile Include="LatencyLevelButton.cpp">
+      <Filter>소스 파일\06. UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SimulateButton.cpp">
       <Filter>소스 파일\06. UI\Game</Filter>
     </ClCompile>
   </ItemGroup>

@@ -34,7 +34,7 @@ public: // 충돌 처리 필요 시 override
 
 public:
 	Pos GetPos() { return _pos; }
-	void SetPos(Pos pos) { _pos = pos; }
+	virtual void SetPos(Pos pos) { _pos = pos; }
 	wstring GetTag() { return _tag; }
 	void SetTag(wstring tag) { _tag = tag; }
 

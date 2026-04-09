@@ -2,6 +2,7 @@
 #include "Room.h"
 #include "Player.h"
 #include "GameSession.h"
+#include "chrono"
 
 RoomRef GRoom = make_shared<Room>();
 
@@ -137,6 +138,36 @@ void Room::HandleMove(Protocol::C_MOVE pkt)
 		info->CopyFrom(pkt.info());
 		Broadcast(sendPkt);
 	}
+}
+
+void Room::HandleLogPos(GameSessionRef session, Protocol::C_LOG_POS pkt)
+{
+	string time = std::format("{:%Y-%m-%d %H:%M:%S}", std::chrono::system_clock::now());
+	string log = std::format("[{}] ID: {}, Rendered Pos: ({}, {})", time, pkt.info().object_id(), pkt.info().pos_x(), pkt.info().pos_y());
+
+	cout << log << endl;
+
+	Protocol::S_WHERE wherePkt;
+
+	PlayerRef player = static_pointer_cast<Player>(_objects[pkt.info().object_id()]);
+	player->session.lock()->SendPacket(wherePkt);
+
+	_logPosSession = session;
+}
+
+void Room::HandleSimulate(uint64 objectId)
+{
+	Protocol::S_SIMULATE pkt;
+
+	PlayerRef player = static_pointer_cast<Player>(_objects[objectId]);
+	player->session.lock()->SendPacket(pkt);
+}
+
+void Room::HandleSimulateFinish()
+{
+	Protocol::S_SIMULATE_FINISH pkt;
+
+	_logPosSession.lock()->SendPacket(pkt);
 }
 
 RoomRef Room::GetRoomRef()

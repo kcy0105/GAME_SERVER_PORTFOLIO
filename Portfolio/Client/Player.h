@@ -7,7 +7,7 @@ class Flipbook;
 class Player : public SyncObject
 {
 public:
-	Player() {}
+	Player() { _isPlayer = true; }
 	virtual ~Player() {}
 
 	virtual void OnInit() override;
@@ -41,5 +41,9 @@ public:
 
 private:
 	Protocol::PosInfo* _destPosInfo = nullptr;
+
+private:
+	const float LOG_PACKET_SEND_INTERVAL = 0.05f;
+	float _logPacketSendTimer = LOG_PACKET_SEND_INTERVAL;
 };
 

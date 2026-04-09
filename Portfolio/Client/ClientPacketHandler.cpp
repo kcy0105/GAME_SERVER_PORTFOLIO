@@ -7,6 +7,8 @@
 #include "NetworkManager.h"
 #include "ObjectManager.h"
 #include "Player.h"
+#include "MyPlayer.h"
+#include "TimeManager.h"
 
 void ClientPacketHandler::Handle_S_LOGIN(SessionRef session, Protocol::S_LOGIN& pkt)
 {
@@ -107,4 +109,24 @@ void ClientPacketHandler::Handle_S_PONG(SessionRef session, Protocol::S_PONG& pk
 	uint64 ping = ::GetTickCount64() - pkt.send_tick();
 
 	GET_SINGLE(NetworkManager)->HandleNewPing(ping);
+}
+
+void ClientPacketHandler::Handle_S_WHERE(SessionRef session, Protocol::S_WHERE& pkt)
+{
+	Player* player = GET_SINGLE(ObjectManager)->GetMyPlayer();
+
+	Protocol::C_HERE herePkt;
+	herePkt.mutable_info()->CopyFrom(player->GetPosInfo());
+
+	GET_SINGLE(NetworkManager)->SendPacket(herePkt);
+}
+
+void ClientPacketHandler::Handle_S_SIMULATE(SessionRef session, Protocol::S_SIMULATE& pkt)
+{
+	GET_SINGLE(ObjectManager)->GetMyPlayer()->StartSimulate();
+}
+
+void ClientPacketHandler::Handle_S_SIMULATE_FINISH(SessionRef session, Protocol::S_SIMULATE_FINISH& pkt)
+{
+	GET_SINGLE(TimeManager)->AddJob(1.f, []() {Config::LogPos = false;});
 }

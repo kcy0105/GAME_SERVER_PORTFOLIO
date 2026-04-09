@@ -7,6 +7,12 @@
 #include "DevScene.h"
 #include "ObjectManager.h"
 
+void MyPlayer::OnInit()
+{
+	__super::OnInit();
+	GET_SINGLE(ObjectManager)->SetMyPlayer(this);
+}
+
 void MyPlayer::OnUpdate()
 {
 	__super::OnUpdate();
@@ -15,7 +21,25 @@ void MyPlayer::OnUpdate()
 
 	bool forceSendPacket = false;
 
-	FillMoveInput();
+	if (_simulate)
+	{
+		_moveInput = { 1, 0 };
+
+		float targetPosX = 200;
+		if (_pos.x >= targetPosX)
+		{
+			_moveInput = { 0, 0 };
+			_simulate = false;
+
+			// 종료 패킷 보내기
+			Protocol::C_SIMULATE_FINISH pkt;
+			GET_SINGLE(NetworkManager)->SendPacket(pkt);
+		}
+	}
+	else
+	{
+		FillMoveInput();
+	}
 
 	// dirty flag
 	if (_lastMoveInput != _moveInput)
@@ -66,8 +90,6 @@ void MyPlayer::OnUpdate()
 
 		GET_SINGLE(NetworkManager)->SendPacket(pkt);
 	}
-
-	
 }
 
 void MyPlayer::FillMoveInput()
@@ -82,5 +104,12 @@ void MyPlayer::FillMoveInput()
 		_moveInput += {-1, 0};
 	if (GET_SINGLE(InputManager)->GetButton(KeyType::Right))
 		_moveInput += {1, 0};
+}
+
+void MyPlayer::StartSimulate()
+{
+	SetPos({ 0, 200 });
+
+	GET_SINGLE(TimeManager)->AddJob(1.f, [this]() {_simulate = true;});
 }
 

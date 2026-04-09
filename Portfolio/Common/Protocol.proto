@@ -66,3 +66,35 @@ message S_PONG
 {
 	uint64 send_tick = 1;
 }
+
+message C_LOG_POS
+{
+	PosInfo info = 1;
+}
+
+message S_WHERE
+{
+	uint64 object_id = 1;
+}
+
+message C_HERE
+{
+	PosInfo info = 1;
+}
+
+message C_SIMULATE
+{
+	uint64 object_id = 1;
+}
+
+message S_SIMULATE
+{
+}
+
+message C_SIMULATE_FINISH
+{
+}
+
+message S_SIMULATE_FINISH
+{
+}
