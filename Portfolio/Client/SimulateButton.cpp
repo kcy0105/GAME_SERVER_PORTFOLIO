@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "NetworkManager.h"
 #include "TimeManager.h"
+#include "MyPlayer.h"
 
 void SimulateButton::OnInit()
 {
@@ -31,18 +32,11 @@ void SimulateButton::OnRelease()
 
 void SimulateButton::OnClickButton()
 {
-	if (Config::LogPos)
-		return;
+	GET_SINGLE(TimeManager)->PushJob(0.1f, []() {GET_SINGLE(ObjectManager)->GetMyPlayer()->SetLogPos(true);});
 
-	GET_SINGLE(TimeManager)->AddJob(0.9f, []() {Config::LogPos = true;});
+	GET_SINGLE(ObjectManager)->GetMyPlayer()->StartSimulate();
 
-	Player* notMyPlayer = GET_SINGLE(ObjectManager)->GetNotMyPlayer();
-	if (notMyPlayer == nullptr)
-		return;
-	uint64 notMyPlayerId = notMyPlayer->GetObjectId();
-
-	Protocol::C_SIMULATE pkt;
-	pkt.set_object_id(notMyPlayerId);
+	Protocol::C_SIMULATE_START pkt;
 
 	GET_SINGLE(NetworkManager)->SendPacket(pkt);
 }

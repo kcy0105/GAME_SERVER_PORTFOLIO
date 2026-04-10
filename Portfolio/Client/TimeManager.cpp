@@ -42,7 +42,7 @@ void TimeManager::Update()
 	}
 }
 
-void TimeManager::AddJob(float delay, std::function<void()> func)
+void TimeManager::PushJob(float delay, std::function<void()> func)
 {
 	Job job;
 	job.executeTime = _accTime + delay;

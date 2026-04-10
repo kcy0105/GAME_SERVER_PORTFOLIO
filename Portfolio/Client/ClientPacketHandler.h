@@ -20,9 +20,7 @@ public:
 
     static void Handle_S_PONG(SessionRef session, Protocol::S_PONG& pkt);
 
-    static void Handle_S_WHERE(SessionRef session, Protocol::S_WHERE& pkt);
-
-    static void Handle_S_SIMULATE(SessionRef session, Protocol::S_SIMULATE& pkt);
+    static void Handle_S_SIMULATE_START(SessionRef session, Protocol::S_SIMULATE_START& pkt);
 
     static void Handle_S_SIMULATE_FINISH(SessionRef session, Protocol::S_SIMULATE_FINISH& pkt);
 

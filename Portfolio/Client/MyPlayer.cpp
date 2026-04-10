@@ -31,9 +31,12 @@ void MyPlayer::OnUpdate()
 			_moveInput = { 0, 0 };
 			_simulate = false;
 
-			// 종료 패킷 보내기
-			Protocol::C_SIMULATE_FINISH pkt;
-			GET_SINGLE(NetworkManager)->SendPacket(pkt);
+			GET_SINGLE(TimeManager)->PushJob(0.5f, [this]()
+				{
+					SetLogPos(false);
+					Protocol::C_SIMULATE_FINISH pkt;
+					GET_SINGLE(NetworkManager)->SendPacket(pkt);
+				});
 		}
 	}
 	else
@@ -110,6 +113,9 @@ void MyPlayer::StartSimulate()
 {
 	SetPos({ 0, 200 });
 
-	GET_SINGLE(TimeManager)->AddJob(1.f, [this]() {_simulate = true;});
+	GET_SINGLE(TimeManager)->PushJob(0.5f, [this]() 
+		{
+			_simulate = true;
+		});
 }
 

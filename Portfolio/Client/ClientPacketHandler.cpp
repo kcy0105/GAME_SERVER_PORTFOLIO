@@ -58,16 +58,16 @@ void ClientPacketHandler::Handle_S_MOVE(SessionRef session, Protocol::S_MOVE& pk
 	{
 		switch (Config::SyncMode)
 		{
-		case SyncMode::Snap:
+		case Protocol::SYNC_MODE_SNAP:
 			player->SetPosInfo(pkt.info());
 			break;
-		case SyncMode::Interpolation:
+		case Protocol::SYNC_MODE_INTERPOLATION:
 			player->SetDestInfo(pkt.info());
 			break;
-		case SyncMode::Velocity:
+		case Protocol::SYNC_MODE_VELOCITY:
 			player->SetPosInfo(pkt.info());
 			break;
-		case SyncMode::DeadReckoning_Snap:
+		case Protocol::SYNC_MODE_DR_SNAP:
 		{
 			auto info = pkt.mutable_info();
 
@@ -82,7 +82,7 @@ void ClientPacketHandler::Handle_S_MOVE(SessionRef session, Protocol::S_MOVE& pk
 			player->SetPosInfo(*info);
 		}
 			break;
-		case SyncMode::DeadReckoning_Follow:
+		case Protocol::SYNC_MODE_DR_FOLLOW:
 		{
 			Protocol::PosInfo info;
 			info.CopyFrom(pkt.info());
@@ -111,22 +111,18 @@ void ClientPacketHandler::Handle_S_PONG(SessionRef session, Protocol::S_PONG& pk
 	GET_SINGLE(NetworkManager)->HandleNewPing(ping);
 }
 
-void ClientPacketHandler::Handle_S_WHERE(SessionRef session, Protocol::S_WHERE& pkt)
+void ClientPacketHandler::Handle_S_SIMULATE_START(SessionRef session, Protocol::S_SIMULATE_START& pkt)
 {
-	Player* player = GET_SINGLE(ObjectManager)->GetMyPlayer();
+	GET_SINGLE(TimeManager)->PushJob(0.1f, [pkt]()
+		{
+			int id = pkt.object_id();
+			static_cast<Player*>(GET_SINGLE(ObjectManager)->GetSyncObject(pkt.object_id()))->SetLogPos(true);
+		});
 
-	Protocol::C_HERE herePkt;
-	herePkt.mutable_info()->CopyFrom(player->GetPosInfo());
-
-	GET_SINGLE(NetworkManager)->SendPacket(herePkt);
-}
-
-void ClientPacketHandler::Handle_S_SIMULATE(SessionRef session, Protocol::S_SIMULATE& pkt)
-{
-	GET_SINGLE(ObjectManager)->GetMyPlayer()->StartSimulate();
 }
 
 void ClientPacketHandler::Handle_S_SIMULATE_FINISH(SessionRef session, Protocol::S_SIMULATE_FINISH& pkt)
 {
-	GET_SINGLE(TimeManager)->AddJob(1.f, []() {Config::LogPos = false;});
+	int a = pkt.object_id();
+	static_cast<Player*>(GET_SINGLE(ObjectManager)->GetSyncObject(pkt.object_id()))->SetLogPos(false);
 }

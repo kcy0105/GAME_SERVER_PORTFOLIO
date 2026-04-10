@@ -16,9 +16,9 @@ public:
 	bool HandleEnterPlayer(PlayerRef player);
 	bool HandleLeavePlayer(PlayerRef player);
 	void HandleMove(Protocol::C_MOVE pkt);
-	void HandleLogPos(GameSessionRef session, Protocol::C_LOG_POS pkt);
-	void HandleSimulate(uint64 objectId);
-	void HandleSimulateFinish();
+	void HandleLogPos(Protocol::C_LOG_POS pkt);
+	void HandleSimulate(PlayerRef player);
+	void HandleSimulateFinish(PlayerRef player);
 
 public:
 	RoomRef GetRoomRef();
@@ -49,8 +49,6 @@ public:
 
 private:
 	unordered_map<uint64, ObjectRef> _objects;
-
-	weak_ptr<GameSession> _logPosSession;
 };
 
 

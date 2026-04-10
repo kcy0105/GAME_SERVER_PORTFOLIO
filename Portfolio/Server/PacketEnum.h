@@ -17,12 +17,10 @@ enum PacketId
     C_PING = 20,
     S_PONG = 21,
     C_LOG_POS = 22,
-    S_WHERE = 23,
-    C_HERE = 24,
-    C_SIMULATE = 25,
-    S_SIMULATE = 26,
-    C_SIMULATE_FINISH = 27,
-    S_SIMULATE_FINISH = 28,
+    C_SIMULATE_START = 23,
+    S_SIMULATE_START = 24,
+    C_SIMULATE_FINISH = 25,
+    S_SIMULATE_FINISH = 26,
 };
 
 template<typename T>
@@ -109,27 +107,15 @@ struct PacketIdType<Protocol::C_LOG_POS>
 };
 
 template<>
-struct PacketIdType<Protocol::S_WHERE>
+struct PacketIdType<Protocol::C_SIMULATE_START>
 {
-    static const uint16 value = S_WHERE;
+    static const uint16 value = C_SIMULATE_START;
 };
 
 template<>
-struct PacketIdType<Protocol::C_HERE>
+struct PacketIdType<Protocol::S_SIMULATE_START>
 {
-    static const uint16 value = C_HERE;
-};
-
-template<>
-struct PacketIdType<Protocol::C_SIMULATE>
-{
-    static const uint16 value = C_SIMULATE;
-};
-
-template<>
-struct PacketIdType<Protocol::S_SIMULATE>
-{
-    static const uint16 value = S_SIMULATE;
+    static const uint16 value = S_SIMULATE_START;
 };
 
 template<>

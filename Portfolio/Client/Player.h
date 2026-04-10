@@ -42,8 +42,13 @@ public:
 private:
 	Protocol::PosInfo* _destPosInfo = nullptr;
 
+public:
+	void SetLogPos(bool logPos) { _logPos = logPos; }
+
 private:
-	const float LOG_PACKET_SEND_INTERVAL = 0.05f;
+	bool _logPos = false;
+
+	const float LOG_PACKET_SEND_INTERVAL = 0.01f;
 	float _logPacketSendTimer = LOG_PACKET_SEND_INTERVAL;
 };
 

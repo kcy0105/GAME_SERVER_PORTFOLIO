@@ -11,6 +11,5 @@ REGISTER_PACKET(S_SPAWN, Protocol::S_SPAWN, ClientPacketHandler::Handle_S_SPAWN)
 REGISTER_PACKET(S_DESPAWN, Protocol::S_DESPAWN, ClientPacketHandler::Handle_S_DESPAWN);
 REGISTER_PACKET(S_MOVE, Protocol::S_MOVE, ClientPacketHandler::Handle_S_MOVE);
 REGISTER_PACKET(S_PONG, Protocol::S_PONG, ClientPacketHandler::Handle_S_PONG);
-REGISTER_PACKET(S_WHERE, Protocol::S_WHERE, ClientPacketHandler::Handle_S_WHERE);
-REGISTER_PACKET(S_SIMULATE, Protocol::S_SIMULATE, ClientPacketHandler::Handle_S_SIMULATE);
+REGISTER_PACKET(S_SIMULATE_START, Protocol::S_SIMULATE_START, ClientPacketHandler::Handle_S_SIMULATE_START);
 REGISTER_PACKET(S_SIMULATE_FINISH, Protocol::S_SIMULATE_FINISH, ClientPacketHandler::Handle_S_SIMULATE_FINISH);

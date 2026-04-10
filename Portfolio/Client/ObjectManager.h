@@ -39,8 +39,6 @@ public:
 	MyPlayer* GetMyPlayer() { return _myPlayer; }
 	uint64 GetMyPlayerId();
 
-	Player* GetNotMyPlayer();
-
 private:
 	MyPlayer* _myPlayer = nullptr;
 

@@ -27,6 +27,6 @@ void SyncModeButton::OnRelease()
 void SyncModeButton::OnClickButton()
 {
 	int mode = static_cast<int>(Config::SyncMode);
-	mode = (mode + 1) % static_cast<int>(SyncMode::Count);
-	Config::SyncMode = static_cast<SyncMode>(mode);
+	mode = (mode + 1) % static_cast<int>(Protocol::SYNC_MODE_COUNT);
+	Config::SyncMode = (Protocol::SyncMode)mode;
 }

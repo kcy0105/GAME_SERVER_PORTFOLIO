@@ -18,9 +18,7 @@ public:
 
     static void Handle_C_LOG_POS(SessionRef session, Protocol::C_LOG_POS& pkt);
 
-    static void Handle_C_HERE(SessionRef session, Protocol::C_HERE& pkt);
-
-    static void Handle_C_SIMULATE(SessionRef session, Protocol::C_SIMULATE& pkt);
+    static void Handle_C_SIMULATE_START(SessionRef session, Protocol::C_SIMULATE_START& pkt);
 
     static void Handle_C_SIMULATE_FINISH(SessionRef session, Protocol::C_SIMULATE_FINISH& pkt);
 

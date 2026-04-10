@@ -69,26 +69,19 @@ message S_PONG
 
 message C_LOG_POS
 {
-	PosInfo info = 1;
+	uint64 timestamp = 1;
+	bool is_my_player = 2;
+	SyncMode sync_mode = 3;
+	PosInfo info = 4;
 }
 
-message S_WHERE
+message C_SIMULATE_START
+{
+}
+
+message S_SIMULATE_START
 {
 	uint64 object_id = 1;
-}
-
-message C_HERE
-{
-	PosInfo info = 1;
-}
-
-message C_SIMULATE
-{
-	uint64 object_id = 1;
-}
-
-message S_SIMULATE
-{
 }
 
 message C_SIMULATE_FINISH
@@ -97,4 +90,5 @@ message C_SIMULATE_FINISH
 
 message S_SIMULATE_FINISH
 {
+	uint64 object_id = 1;
 }

@@ -41,19 +41,19 @@ void DevUI::OnRender(HDC hdc)
 	wstring syncMode;
 	switch (Config::SyncMode)
 	{
-	case SyncMode::Snap:
+	case Protocol::SYNC_MODE_SNAP:
 		syncMode = L"SNAP";
 		break;
-	case SyncMode::Interpolation:
+	case Protocol::SYNC_MODE_INTERPOLATION:
 		syncMode = L"INTERPOLATION";
 		break;
-	case SyncMode::Velocity:
+	case Protocol::SYNC_MODE_VELOCITY:
 		syncMode = L"VELOCITY";
 		break;
-	case SyncMode::DeadReckoning_Snap:
+	case Protocol::SYNC_MODE_DR_SNAP:
 		syncMode = L"DR_SNAP";
 		break;
-	case SyncMode::DeadReckoning_Follow:
+	case Protocol::SYNC_MODE_DR_FOLLOW:
 		syncMode = L"DR_FOLLOW";
 		break;
 	}

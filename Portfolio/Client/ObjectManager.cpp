@@ -45,21 +45,3 @@ uint64 ObjectManager::GetMyPlayerId()
 {
 	return _myPlayer->GetObjectId();
 }
-
-Player* ObjectManager::GetNotMyPlayer()
-{
-	for (auto& item : _syncObjects)
-	{
-		auto obj = item.second;
-		if (obj->IsPlayer())
-		{
-			auto player = static_cast<Player*>(obj);
-			if (player->IsMyPlayer() == false)
-			{
-				return player;
-			}
-		}
-	}
-
-	return nullptr;
-}

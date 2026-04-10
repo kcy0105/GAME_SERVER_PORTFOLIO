@@ -14,7 +14,7 @@ public:
 	float GetDeltaTime() { return _deltaTime; }
 
 	// Ãß°¡
-	void AddJob(float delay, std::function<void()> func);
+	void PushJob(float delay, std::function<void()> func);
 
 private:
 	uint64 _frequency = 0;

@@ -2,7 +2,6 @@
 #include "Room.h"
 #include "Player.h"
 #include "GameSession.h"
-#include "chrono"
 
 RoomRef GRoom = make_shared<Room>();
 
@@ -140,34 +139,79 @@ void Room::HandleMove(Protocol::C_MOVE pkt)
 	}
 }
 
-void Room::HandleLogPos(GameSessionRef session, Protocol::C_LOG_POS pkt)
+void Room::HandleLogPos(Protocol::C_LOG_POS pkt)
 {
-	string time = std::format("{:%Y-%m-%d %H:%M:%S}", std::chrono::system_clock::now());
-	string log = std::format("[{}] ID: {}, Rendered Pos: ({}, {})", time, pkt.info().object_id(), pkt.info().pos_x(), pkt.info().pos_y());
+	string log;
+	if (pkt.is_my_player())
+	{
+		log = std::format("[{}] REAL POS: ({}, {})", pkt.timestamp(), pkt.info().pos_x(), pkt.info().pos_y());
+	}	
+	else
+	{
+		string syncMode;
+		switch (pkt.sync_mode())
+		{
+		case Protocol::SYNC_MODE_SNAP:
+			syncMode = "SNAP";
+			break;
+		case Protocol::SYNC_MODE_INTERPOLATION:
+			syncMode = "INTERPOLATION";
+			break;
+		case Protocol::SYNC_MODE_VELOCITY:
+			syncMode = "VELOCITY";
+			break;
+		case Protocol::SYNC_MODE_DR_SNAP:
+			syncMode = "DR_SNAP";
+			break;
+		case Protocol::SYNC_MODE_DR_FOLLOW:
+			syncMode = "DR_FOLLOW";
+			break;
+		}
+		log = std::format("[{}] [{}] RENDERED POS: ({}, {})", pkt.timestamp(), syncMode, pkt.info().pos_x(), pkt.info().pos_y());
+	}
 
 	cout << log << endl;
-
-	Protocol::S_WHERE wherePkt;
-
-	PlayerRef player = static_pointer_cast<Player>(_objects[pkt.info().object_id()]);
-	player->session.lock()->SendPacket(wherePkt);
-
-	_logPosSession = session;
 }
 
-void Room::HandleSimulate(uint64 objectId)
+void Room::HandleSimulate(PlayerRef player)
 {
-	Protocol::S_SIMULATE pkt;
+	uint64 playerId = player->objectInfo->object_id();
 
-	PlayerRef player = static_pointer_cast<Player>(_objects[objectId]);
-	player->session.lock()->SendPacket(pkt);
+	Protocol::S_SIMULATE_START pkt;
+
+	pkt.set_object_id(playerId);
+
+	for (auto& item : _objects)
+	{
+		if (item.first == playerId)
+			continue;
+
+		if (!item.second->IsPlayer())
+			continue;
+
+		PlayerRef player = static_pointer_cast<Player>(item.second);
+		player->session.lock()->SendPacket(pkt);
+	}
 }
 
-void Room::HandleSimulateFinish()
+void Room::HandleSimulateFinish(PlayerRef player)
 {
+	uint64 playerId = player->objectInfo->object_id();
+
 	Protocol::S_SIMULATE_FINISH pkt;
+	pkt.set_object_id(playerId);
 
-	_logPosSession.lock()->SendPacket(pkt);
+	for (auto& item : _objects)
+	{
+		if (item.first == playerId)
+			continue;
+
+		if (!item.second->IsPlayer())
+			continue;
+
+		PlayerRef player = static_pointer_cast<Player>(item.second);
+		player->session.lock()->SendPacket(pkt);
+	}
 }
 
 RoomRef Room::GetRoomRef()

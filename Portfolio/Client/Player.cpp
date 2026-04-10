@@ -30,11 +30,12 @@ void Player::OnUpdate()
 	{
 		switch (Config::SyncMode)
 		{
-		case SyncMode::Interpolation:
+		case Protocol::SYNC_MODE_INTERPOLATION:
 		{
 			Vec2 dir = Vec2{ _destPosInfo->pos_x(), _destPosInfo->pos_y() } - _pos;
+			float dist = dir.Length();
 
-			if (dir.Length() < 1)
+			if (dist < 1 || dist > 100)
 			{
 				_pos = { _destPosInfo->pos_x(), _destPosInfo->pos_y() };
 
@@ -55,8 +56,8 @@ void Player::OnUpdate()
 			}
 		}
 			break;
-		case SyncMode::Velocity:
-		case SyncMode::DeadReckoning_Snap:
+		case Protocol::SYNC_MODE_VELOCITY:
+		case Protocol::SYNC_MODE_DR_SNAP:
 		{
 			if (GetMoveState() == Protocol::MOVE_STATE_RUN)
 			{
@@ -65,7 +66,7 @@ void Player::OnUpdate()
 			}
 		}
 			break;
-		case SyncMode::DeadReckoning_Follow:
+		case Protocol::SYNC_MODE_DR_FOLLOW:
 		{
 			_destPosInfo->set_pos_x(_destPosInfo->pos_x() + _destPosInfo->velocity_x() * deltaTime);
 			_destPosInfo->set_pos_y(_destPosInfo->pos_y() + _destPosInfo->velocity_y() * deltaTime);
@@ -75,7 +76,7 @@ void Player::OnUpdate()
 
 			float dist = diff.Length();
 
-			if (dist < 1.f)
+			if (dist < 1 || dist > 100)
 			{
 				_pos = targetPos;
 
@@ -96,22 +97,25 @@ void Player::OnUpdate()
 		}
 		break;
 		}
+	}
 
-		// 주기적으로 C_WHERE을 전송
-		if (Config::LogPos)
+	// 주기적으로 C_WHERE을 전송
+	if (_logPos)
+	{
+		_logPacketSendTimer -= deltaTime;
+
+		if (_logPacketSendTimer <= 0)
 		{
-			_logPacketSendTimer -= deltaTime;
+			_logPacketSendTimer = LOG_PACKET_SEND_INTERVAL;
 
-			if (_logPacketSendTimer <= 0)
-			{
-				_logPacketSendTimer = LOG_PACKET_SEND_INTERVAL;
+			Protocol::C_LOG_POS pkt;
 
-				Protocol::C_LOG_POS pkt;
-				pkt.mutable_info()->CopyFrom(*_posInfo);
+			pkt.set_timestamp(::GetTickCount64());
+			pkt.set_is_my_player(_isMyPlayer);
+			pkt.set_sync_mode(Config::SyncMode);
+			pkt.mutable_info()->CopyFrom(*_posInfo);
 
-				GET_SINGLE(NetworkManager)->SendPacket(pkt);
-			}
-
+			GET_SINGLE(NetworkManager)->SendPacket(pkt);
 		}
 	}
 }
@@ -124,8 +128,8 @@ void Player::OnDebugRender(HDC hdc)
 {
 	if (!_isMyPlayer)
 	{
-		if (Config::SyncMode == SyncMode::DeadReckoning_Follow
-			|| Config::SyncMode == SyncMode::Interpolation)
+		if (Config::SyncMode == Protocol::SYNC_MODE_DR_FOLLOW
+			|| Config::SyncMode == Protocol::SYNC_MODE_INTERPOLATION)
 			Utils::DrawCircleInWorld(hdc, { _destPosInfo->pos_x(), _destPosInfo->pos_y() }, 5);
 	}
 }

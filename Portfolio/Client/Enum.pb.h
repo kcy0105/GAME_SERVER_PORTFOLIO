@@ -152,6 +152,35 @@ inline bool MoveState_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MoveState>(
     MoveState_descriptor(), name, value);
 }
+enum SyncMode : int {
+  SYNC_MODE_SNAP = 0,
+  SYNC_MODE_INTERPOLATION = 1,
+  SYNC_MODE_VELOCITY = 2,
+  SYNC_MODE_DR_SNAP = 3,
+  SYNC_MODE_DR_FOLLOW = 4,
+  SYNC_MODE_COUNT = 5,
+  SyncMode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SyncMode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SyncMode_IsValid(int value);
+constexpr SyncMode SyncMode_MIN = SYNC_MODE_SNAP;
+constexpr SyncMode SyncMode_MAX = SYNC_MODE_COUNT;
+constexpr int SyncMode_ARRAYSIZE = SyncMode_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SyncMode_descriptor();
+template<typename T>
+inline const std::string& SyncMode_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SyncMode>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SyncMode_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SyncMode_descriptor(), enum_t_value);
+}
+inline bool SyncMode_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SyncMode* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SyncMode>(
+    SyncMode_descriptor(), name, value);
+}
 // ===================================================================
 
 
@@ -193,6 +222,11 @@ template <> struct is_proto_enum< ::Protocol::MoveState> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::MoveState>() {
   return ::Protocol::MoveState_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::SyncMode> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::SyncMode>() {
+  return ::Protocol::SyncMode_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE
