@@ -11,7 +11,7 @@ public:
 	void Update();
 
 	uint32 GetFps() { return _fps; }
-	float GetDeltaTime() { return _deltaTime; }
+	double GetDeltaTime() { return _deltaTime; }
 
 	// Ãß°¡
 	void PushJob(float delay, std::function<void()> func);

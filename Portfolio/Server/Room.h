@@ -16,7 +16,6 @@ public:
 	bool HandleEnterPlayer(PlayerRef player);
 	bool HandleLeavePlayer(PlayerRef player);
 	void HandleMove(Protocol::C_MOVE pkt);
-	void HandleLogPos(Protocol::C_LOG_POS pkt);
 	void HandleSimulate(PlayerRef player);
 	void HandleSimulateFinish(PlayerRef player);
 

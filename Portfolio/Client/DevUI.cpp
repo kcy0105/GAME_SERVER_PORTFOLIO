@@ -38,26 +38,7 @@ void DevUI::OnRender(HDC hdc)
 	Utils::DrawTextInScreen(hdc, { 550, 10 }, std::format(L"FPS({}) DT({})", fps, deltaTime));
 	Utils::DrawTextInScreen(hdc, { 550, 30 }, std::format(L"PING({})", ping));
 
-	wstring syncMode;
-	switch (Config::SyncMode)
-	{
-	case Protocol::SYNC_MODE_SNAP:
-		syncMode = L"SNAP";
-		break;
-	case Protocol::SYNC_MODE_INTERPOLATION:
-		syncMode = L"INTERPOLATION";
-		break;
-	case Protocol::SYNC_MODE_VELOCITY:
-		syncMode = L"VELOCITY";
-		break;
-	case Protocol::SYNC_MODE_DR_SNAP:
-		syncMode = L"DR_SNAP";
-		break;
-	case Protocol::SYNC_MODE_DR_FOLLOW:
-		syncMode = L"DR_FOLLOW";
-		break;
-	}
-	Utils::DrawTextInScreen(hdc, { 550, 50 }, std::format(L"SYNC MODE({})", syncMode));
+	Utils::DrawTextInScreen(hdc, { 550, 50 }, std::format(L"SYNC MODE({})", Utils::GetSyncModeNameW(Config::SyncMode)));
 	Utils::DrawTextInScreen(hdc, { 550, 70 }, std::format(L"LATENCY LEVEL({})", Config::LatencyLevel));
 }
 

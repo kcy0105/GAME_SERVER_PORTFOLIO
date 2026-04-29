@@ -6,6 +6,7 @@
 #include "ResourceManager.h"
 #include "ObjectManager.h"
 #include "NetworkManager.h"
+#include "LogManager.h"
 
 void Player::OnInit()
 {
@@ -99,24 +100,12 @@ void Player::OnUpdate()
 		}
 	}
 
-	// 주기적으로 C_WHERE을 전송
 	if (_logPos)
 	{
-		_logPacketSendTimer -= deltaTime;
+		string log = std::format("[{}] ({}, {})", ::GetTickCount64(), _pos.x, _pos.y);
+		string logKey = _isMyPlayer ? "REAL" : Utils::GetSyncModeName(Config::SyncMode);
 
-		if (_logPacketSendTimer <= 0)
-		{
-			_logPacketSendTimer = LOG_PACKET_SEND_INTERVAL;
-
-			Protocol::C_LOG_POS pkt;
-
-			pkt.set_timestamp(::GetTickCount64());
-			pkt.set_is_my_player(_isMyPlayer);
-			pkt.set_sync_mode(Config::SyncMode);
-			pkt.mutable_info()->CopyFrom(*_posInfo);
-
-			GET_SINGLE(NetworkManager)->SendPacket(pkt);
-		}
+		GET_SINGLE(LogManager)->AddLog(logKey, log);
 	}
 }
 
@@ -185,5 +174,23 @@ void Player::SetDestInfo(const Protocol::PosInfo& info)
 	_destPosInfo->CopyFrom(info);
 
 	SetDirection(info.looking_right());
+}
+
+void Player::SetLogPos(bool logPos)
+{
+	string logKey1 = _isMyPlayer ? "REAL" : Utils::GetSyncModeName(Config::SyncMode);
+	string logKey2 = _isMyPlayer ? "REAL_PACKET" : Utils::GetSyncModeName(Config::SyncMode) + "_PACKET";
+	if (logPos)
+	{
+		GET_SINGLE(LogManager)->InitLog(logKey1);
+		GET_SINGLE(LogManager)->InitLog(logKey2);
+	}
+	else
+	{
+		GET_SINGLE(LogManager)->WriteLog(logKey1);
+		GET_SINGLE(LogManager)->WriteLog(logKey2);
+	}
+
+	_logPos = logPos;
 }
 

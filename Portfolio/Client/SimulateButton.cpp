@@ -32,7 +32,7 @@ void SimulateButton::OnRelease()
 
 void SimulateButton::OnClickButton()
 {
-	GET_SINGLE(TimeManager)->PushJob(0.1f, []() {GET_SINGLE(ObjectManager)->GetMyPlayer()->SetLogPos(true);});
+	GET_SINGLE(ObjectManager)->GetMyPlayer()->SetLogPos(true);
 
 	GET_SINGLE(ObjectManager)->GetMyPlayer()->StartSimulate();
 

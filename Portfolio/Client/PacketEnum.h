@@ -16,11 +16,10 @@ enum PacketId
     S_MOVE = 19,
     C_PING = 20,
     S_PONG = 21,
-    C_LOG_POS = 22,
-    C_SIMULATE_START = 23,
-    S_SIMULATE_START = 24,
-    C_SIMULATE_FINISH = 25,
-    S_SIMULATE_FINISH = 26,
+    C_SIMULATE_START = 22,
+    S_SIMULATE_START = 23,
+    C_SIMULATE_FINISH = 24,
+    S_SIMULATE_FINISH = 25,
 };
 
 template<typename T>
@@ -98,12 +97,6 @@ template<>
 struct PacketIdType<Protocol::S_PONG>
 {
     static const uint16 value = S_PONG;
-};
-
-template<>
-struct PacketIdType<Protocol::C_LOG_POS>
-{
-    static const uint16 value = C_LOG_POS;
 };
 
 template<>

@@ -6,6 +6,7 @@
 #include "NetworkManager.h"
 #include "DevScene.h"
 #include "ObjectManager.h"
+#include "LogManager.h"
 
 void MyPlayer::OnInit()
 {
@@ -92,6 +93,12 @@ void MyPlayer::OnUpdate()
 		pkt.mutable_info()->CopyFrom(*_posInfo);
 
 		GET_SINGLE(NetworkManager)->SendPacket(pkt);
+
+		// LOG
+		if (GetLogPos())
+		{
+			GET_SINGLE(LogManager)->AddLog("REAL_PACKET", std::format("{}", ::GetTickCount64()));
+		}
 	}
 }
 

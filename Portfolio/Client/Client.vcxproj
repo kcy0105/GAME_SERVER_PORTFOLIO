@@ -148,6 +148,7 @@
     <ClInclude Include="FlipbookRenderer.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="LatencyLevelButton.h" />
+    <ClInclude Include="LogManager.h" />
     <ClInclude Include="SimulateButton.h" />
     <ClInclude Include="MyPlayer.h" />
     <ClInclude Include="NetworkManager.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="FlipbookRenderer.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="LatencyLevelButton.cpp" />
+    <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="SimulateButton.cpp" />
     <ClCompile Include="MyPlayer.cpp" />
     <ClCompile Include="NetworkManager.cpp" />

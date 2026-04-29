@@ -139,40 +139,6 @@ void Room::HandleMove(Protocol::C_MOVE pkt)
 	}
 }
 
-void Room::HandleLogPos(Protocol::C_LOG_POS pkt)
-{
-	string log;
-	if (pkt.is_my_player())
-	{
-		log = std::format("[{}] REAL POS: ({}, {})", pkt.timestamp(), pkt.info().pos_x(), pkt.info().pos_y());
-	}	
-	else
-	{
-		string syncMode;
-		switch (pkt.sync_mode())
-		{
-		case Protocol::SYNC_MODE_SNAP:
-			syncMode = "SNAP";
-			break;
-		case Protocol::SYNC_MODE_INTERPOLATION:
-			syncMode = "INTERPOLATION";
-			break;
-		case Protocol::SYNC_MODE_VELOCITY:
-			syncMode = "VELOCITY";
-			break;
-		case Protocol::SYNC_MODE_DR_SNAP:
-			syncMode = "DR_SNAP";
-			break;
-		case Protocol::SYNC_MODE_DR_FOLLOW:
-			syncMode = "DR_FOLLOW";
-			break;
-		}
-		log = std::format("[{}] [{}] RENDERED POS: ({}, {})", pkt.timestamp(), syncMode, pkt.info().pos_x(), pkt.info().pos_y());
-	}
-
-	cout << log << endl;
-}
-
 void Room::HandleSimulate(PlayerRef player)
 {
 	uint64 playerId = player->objectInfo->object_id();

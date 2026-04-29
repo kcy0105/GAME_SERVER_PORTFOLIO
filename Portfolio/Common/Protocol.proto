@@ -67,14 +67,6 @@ message S_PONG
 	uint64 send_tick = 1;
 }
 
-message C_LOG_POS
-{
-	uint64 timestamp = 1;
-	bool is_my_player = 2;
-	SyncMode sync_mode = 3;
-	PosInfo info = 4;
-}
-
 message C_SIMULATE_START
 {
 }

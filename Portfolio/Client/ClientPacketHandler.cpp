@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "MyPlayer.h"
 #include "TimeManager.h"
+#include "LogManager.h"
 
 void ClientPacketHandler::Handle_S_LOGIN(SessionRef session, Protocol::S_LOGIN& pkt)
 {
@@ -56,6 +57,11 @@ void ClientPacketHandler::Handle_S_MOVE(SessionRef session, Protocol::S_MOVE& pk
 	}
 	else
 	{
+		if (player->GetLogPos())
+		{
+			GET_SINGLE(LogManager)->AddLog(Utils::GetSyncModeName(Config::SyncMode) + "_PACKET", std::format("{}", ::GetTickCount64()));
+		}
+
 		switch (Config::SyncMode)
 		{
 		case Protocol::SYNC_MODE_SNAP:
@@ -113,12 +119,8 @@ void ClientPacketHandler::Handle_S_PONG(SessionRef session, Protocol::S_PONG& pk
 
 void ClientPacketHandler::Handle_S_SIMULATE_START(SessionRef session, Protocol::S_SIMULATE_START& pkt)
 {
-	GET_SINGLE(TimeManager)->PushJob(0.1f, [pkt]()
-		{
-			int id = pkt.object_id();
-			static_cast<Player*>(GET_SINGLE(ObjectManager)->GetSyncObject(pkt.object_id()))->SetLogPos(true);
-		});
-
+	int id = pkt.object_id();
+	static_cast<Player*>(GET_SINGLE(ObjectManager)->GetSyncObject(pkt.object_id()))->SetLogPos(true);
 }
 
 void ClientPacketHandler::Handle_S_SIMULATE_FINISH(SessionRef session, Protocol::S_SIMULATE_FINISH& pkt)

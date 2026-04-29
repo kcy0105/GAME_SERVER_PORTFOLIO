@@ -57,19 +57,6 @@ void ServerPacketHandler::Handle_C_PING(SessionRef session, Protocol::C_PING& pk
 	static_pointer_cast<GameSession>(session)->SendPacket(pongPkt);
 }
 
-void ServerPacketHandler::Handle_C_LOG_POS(SessionRef session, Protocol::C_LOG_POS& pkt)
-{
-	PlayerRef player = static_pointer_cast<GameSession>(session)->player.load();
-	if (player == nullptr)
-		return;
-
-	RoomRef room = player->room.load().lock();
-	if (room == nullptr)
-		return;
-
-	room->HandleLogPos(pkt);
-}
-
 void ServerPacketHandler::Handle_C_SIMULATE_START(SessionRef session, Protocol::C_SIMULATE_START& pkt)
 {
 	PlayerRef player = static_pointer_cast<GameSession>(session)->player.load();

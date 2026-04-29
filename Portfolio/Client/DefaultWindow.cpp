@@ -44,6 +44,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DEFAULTWINDOW));
 
+    srand(1916);
+
     Game game;
     game.Init();
 
@@ -78,11 +80,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             float targetFps = 60;
             float tick = 1 / targetFps;
 
-            while (accumulator >= tick)
+            if (accumulator >= tick)
             {
                 game.Update();
                 game.Render();
-                accumulator -= tick;
+                accumulator = 0;
             }
         }
     }

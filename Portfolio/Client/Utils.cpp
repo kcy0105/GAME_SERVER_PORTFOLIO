@@ -90,3 +90,41 @@ Vec2 Utils::GetDirection(float angle)
 {
 	return Vec2(::cos(angle * DEG2RAD), -::sin(angle * DEG2RAD));
 }
+
+string Utils::GetSyncModeName(Protocol::SyncMode syncMode)
+{
+	switch (syncMode)
+	{
+	case Protocol::SYNC_MODE_SNAP:
+		return "SNAP";
+	case Protocol::SYNC_MODE_INTERPOLATION:
+		return "INTERPOLATION";
+	case Protocol::SYNC_MODE_VELOCITY:
+		return "VELOCITY";
+	case Protocol::SYNC_MODE_DR_SNAP:
+		return "DR_SNAP";
+	case Protocol::SYNC_MODE_DR_FOLLOW:
+		return "DR_FOLLOW";
+	}
+
+	return "";
+}
+
+wstring Utils::GetSyncModeNameW(Protocol::SyncMode syncMode)
+{
+	switch (syncMode)
+	{
+	case Protocol::SYNC_MODE_SNAP:
+		return L"SNAP";
+	case Protocol::SYNC_MODE_INTERPOLATION:
+		return L"INTERPOLATION";
+	case Protocol::SYNC_MODE_VELOCITY:
+		return L"VELOCITY";
+	case Protocol::SYNC_MODE_DR_SNAP:
+		return L"DR_SNAP";
+	case Protocol::SYNC_MODE_DR_FOLLOW:
+		return L"DR_FOLLOW";
+	}
+
+	return L"";
+}

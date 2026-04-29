@@ -221,6 +221,9 @@
     <ClInclude Include="SimulateButton.h">
       <Filter>소스 파일\06. UI\Game</Filter>
     </ClInclude>
+    <ClInclude Include="LogManager.h">
+      <Filter>소스 파일\01. Manager\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -351,6 +354,9 @@
     </ClCompile>
     <ClCompile Include="SimulateButton.cpp">
       <Filter>소스 파일\06. UI\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="LogManager.cpp">
+      <Filter>소스 파일\01. Manager\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

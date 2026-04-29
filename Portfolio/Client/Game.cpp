@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "ResourceManager.h"
 #include "NetworkManager.h"
+#include "LogManager.h"
 
 Game::Game()
 {
@@ -27,11 +28,11 @@ void Game::Init()
 	HBITMAP prev = (HBITMAP)::SelectObject(_hdcBack, _bmpBack);
 	::DeleteObject(prev);
 
+	GET_SINGLE(LogManager)->Init(fs::path("C:\\Users\\user\\¹ÙÅÁ È­¸é\\GAME_SERVER_PORTFOLIO\\Portfolio\\Logs"));
 	GET_SINGLE(TimeManager)->Init();
 	GET_SINGLE(InputManager)->Init();
 	GET_SINGLE(SceneManager)->Init();
 	GET_SINGLE(ResourceManager)->Init(fs::path(L"C:\\Users\\user\\¹ÙÅÁ È­¸é\\GAME_SERVER_PORTFOLIO\\Portfolio\\Resources"));
-
 	GET_SINGLE(SceneManager)->ChangeScene(SceneType::DevScene);
 
 	

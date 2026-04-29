@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TimeManager.h"
+#include "LogManager.h"
 
 void TimeManager::Init()
 {
